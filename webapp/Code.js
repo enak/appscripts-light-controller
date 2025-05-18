@@ -26,8 +26,8 @@ function getControlSpreadsheetId() {
   const spreadsheetId = scriptProperties.getProperty('CONTROL_SPREADSHEET_ID');
   
   if (!spreadsheetId) {
-    Logger.log('Warning: CONTROL_SPREADSHEET_ID not set in script properties');
-    return '1gXKvJWPFknqdi9QeyCAXqiC4MqaDJoKQvn130hVe6_c'; // Default fallback ID
+    Logger.log('ERROR: CONTROL_SPREADSHEET_ID not set in script properties');
+    throw new Error('CONTROL_SPREADSHEET_ID not set in script properties');
   }
   
   return spreadsheetId;
