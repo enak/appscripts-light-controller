@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  appscripts-light-controller:
+    build: .
+    container_name: appscripts-light-controller
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      - ./credentials:/app/credentials
+    restart: unless-stopped
+    environment:
+      - TZ=UTC  # Change this to your timezone

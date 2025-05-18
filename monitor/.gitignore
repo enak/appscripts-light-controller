@@ -1,0 +1,21 @@
+# Configuration file with sensitive information
+config.yaml
+
+# Credentials directory
+credentials/
+!credentials/.gitkeep
+
+
+# Log files
+*.log
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual environment
+venv/
+env/
+ENV/

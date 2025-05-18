@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Controls</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .button-container {
+        margin-bottom: 20px;
+      }
+      .control-button {
+        background-color: #4285f4;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        padding: 12px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 6px 3px;
+        cursor: pointer;
+        width: 100%;
+      }
+      .control-button:hover {
+        background-color: #2a75f3;
+      }
+      .control-button:active {
+        background-color: #1a65e3;
+      }
+      .off-button {
+        background-color: #db4437;
+      }
+      .off-button:hover {
+        background-color: #c53929;
+      }
+      .slider-container {
+        margin: 20px 0;
+      }
+      .slider {
+        width: 100%;
+        height: 25px;
+      }
+      .color-picker {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+      }
+      .status {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 4px;
+        display: none;
+      }
+      .success {
+        background-color: #d9f7d9;
+        color: #0d5e0d;
+      }
+      .error {
+        background-color: #f7d9d9;
+        color: #5e0d0d;
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      h3 {
+        margin-top: 30px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 8px;
+        color: #555;
+      }
+      .light-selector {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+      .footer {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+      }
+      .brightness-value {
+        display: inline-block;
+        width: 50px;
+        text-align: right;
+      }
+      .settings-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        color: #555;
+      }
+      .settings-panel {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+      }
+      .settings-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 500px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      .settings-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .settings-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #555;
+      }
+      .settings-form {
+        margin-bottom: 20px;
+      }
+      .settings-input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      @media (max-width: 480px) {
+        body {
+          padding: 10px;
+        }
+        .control-button {
+          padding: 15px 10px;
+        }
+        .settings-content {
+          width: 90%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button id="settings-button" class="settings-button" title="Settings">⚙️</button>
+    
+    <h1>Light Controls</h1>
+    
+    <div>
+      <label for="light-selector">Select Light:</label>
+      <select id="light-selector" class="light-selector" onchange="updateSelectedLight()">
+        <!-- Options will be populated by JavaScript -->
+      </select>
+    </div>
+    
+    <h3 id="light-title">Light</h3>
+    <div class="button-container">
+      <button class="control-button" onclick="turnOnLight()">Turn On</button>
+      <button class="control-button off-button" onclick="turnOffLight()">Turn Off</button>
+    </div>
+    
+    <div class="slider-container">
+      <label for="brightness">Brightness:</label>
+      <input type="range" min="0" max="100" value="100" class="slider" id="brightness" onchange="updateBrightness(this.value)">
+      <span id="brightness-value" class="brightness-value">100%</span>
+    </div>
+    
+    <div class="color-container">
+      <label for="color-picker">Color:</label>
+      <input type="color" id="color-picker" class="color-picker" value="#FFFFFF" onchange="updateColor(this.value)">
+    </div>
+    
+    <h3>Preset Scenes</h3>
+    <div class="button-container">
+      <button class="control-button" onclick="activateScene('performance')">Performance</button>
+      <button class="control-button" onclick="activateScene('intermission')">Intermission</button>
+      <button class="control-button" onclick="activateScene('pre_show')">Pre-Show</button>
+      <button class="control-button" onclick="activateScene('post_show')">Post-Show</button>
+    </div>
+    
+    <div id="status" class="status"></div>
+    
+    <div class="footer">
+      <p>AppScriptsLightController</p>
+    </div>
+    
+    <!-- Settings Panel -->
+    <div id="settings-panel" class="settings-panel">
+      <div class="settings-content">
+        <div class="settings-header">
+          <h2>Settings</h2>
+          <button class="settings-close" id="settings-close">&times;</button>
+        </div>
+        <div class="settings-form">
+          <label for="spreadsheet-id">Google Sheet ID:</label>
+          <input type="text" id="spreadsheet-id" class="settings-input" placeholder="Enter Google Sheet ID">
+          <button class="control-button" onclick="saveSettings()">Save Settings</button>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      // Current selected light
+      let selectedLight = '';
+      
+      // Initialize the UI when the page loads
+      window.onload = function() {
+        loadAvailableLights();
+        setupSettingsPanel();
+      };
+      
+      // Set up the settings panel
+      function setupSettingsPanel() {
+        const settingsButton = document.getElementById('settings-button');
+        const settingsPanel = document.getElementById('settings-panel');
+        const settingsClose = document.getElementById('settings-close');
+        
+        // Open settings panel
+        settingsButton.addEventListener('click', function() {
+          settingsPanel.style.display = 'flex';
+          // Load current spreadsheet ID
+          google.script.run
+            .withSuccessHandler(function(spreadsheetId) {
+              document.getElementById('spreadsheet-id').value = spreadsheetId;
+            })
+            .getControlSpreadsheetId();
+        });
+        
+        // Close settings panel
+        settingsClose.addEventListener('click', function() {
+          settingsPanel.style.display = 'none';
+        });
+        
+        // Close when clicking outside the content
+        settingsPanel.addEventListener('click', function(event) {
+          if (event.target === settingsPanel) {
+            settingsPanel.style.display = 'none';
+          }
+        });
+      }
+      
+      // Save settings
+      function saveSettings() {
+        const spreadsheetId = document.getElementById('spreadsheet-id').value.trim();
+        
+        if (!spreadsheetId) {
+          showError('Please enter a valid Google Sheet ID');
+          return;
+        }
+        
+        google.script.run
+          .withSuccessHandler(function(result) {
+            document.getElementById('settings-panel').style.display = 'none';
+            showSuccess(result);
+            // Reload lights after changing spreadsheet
+            loadAvailableLights();
+          })
+          .withFailureHandler(showError)
+          .setControlSpreadsheetId(spreadsheetId);
+      }
+      
+      // Load available lights from configuration
+      function loadAvailableLights() {
+        google.script.run
+          .withSuccessHandler(populateLightSelector)
+          .withFailureHandler(showError)
+          .getAvailableLights();
+      }
+      
+      // Populate the light selector dropdown
+      function populateLightSelector(lights) {
+        const selector = document.getElementById('light-selector');
+        selector.innerHTML = '';
+        
+        if (lights && lights.length > 0) {
+          lights.forEach(function(light) {
+            const option = document.createElement('option');
+            option.value = light;
+            option.textContent = formatLightName(light);
+            selector.appendChild(option);
+          });
+          
+          // Select the first light by default
+          selectedLight = lights[0];
+          updateLightTitle();
+        } else {
+          // Add a default option if no lights are available
+          const option = document.createElement('option');
+          option.value = 'light_1';
+          option.textContent = 'Light 1';
+          selector.appendChild(option);
+          selectedLight = 'light_1';
+          updateLightTitle();
+        }
+      }
+      
+      // Format light name for display (convert snake_case to Title Case)
+      function formatLightName(name) {
+        return name
+          .split('_')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
+      
+      // Update the selected light when the dropdown changes
+      function updateSelectedLight() {
+        selectedLight = document.getElementById('light-selector').value;
+        updateLightTitle();
+      }
+      
+      // Update the light title based on the selected light
+      function updateLightTitle() {
+        document.getElementById('light-title').textContent = formatLightName(selectedLight);
+      }
+      
+      // Turn on the selected light
+      function turnOnLight() {
+        google.script.run
+          .withSuccessHandler(showSuccess)
+          .withFailureHandler(showError)
+          .turnOnLight(selectedLight);
+      }
+      
+      // Turn off the selected light
+      function turnOffLight() {
+        google.script.run
+          .withSuccessHandler(showSuccess)
+          .withFailureHandler(showError)
+          .turnOffLight(selectedLight);
+      }
+      
+      // Update the brightness of the selected light
+      function updateBrightness(value) {
+        document.getElementById('brightness-value').textContent = value + '%';
+        google.script.run
+          .withSuccessHandler(showSuccess)
+          .withFailureHandler(showError)
+          .dimLight(selectedLight, parseInt(value));
+      }
+      
+      // Update the color of the selected light
+      function updateColor(color) {
+        google.script.run
+          .withSuccessHandler(showSuccess)
+          .withFailureHandler(showError)
+          .setLightColor(selectedLight, color);
+      }
+      
+      // Activate a preset scene
+      function activateScene(scene) {
+        google.script.run
+          .withSuccessHandler(showSuccess)
+          .withFailureHandler(showError)
+          .activateScene(scene);
+      }
+      
+      // Show success message
+      function showSuccess(result) {
+        const statusDiv = document.getElementById('status');
+        statusDiv.textContent = result.message;
+        statusDiv.className = 'status success';
+        statusDiv.style.display = 'block';
+        
+        // Hide the message after 3 seconds
+        setTimeout(function() {
+          statusDiv.style.display = 'none';
+        }, 3000);
+      }
+      
+      // Show error message
+      function showError(error) {
+        const statusDiv = document.getElementById('status');
+        statusDiv.textContent = typeof error === 'string' ? error : 'An error occurred';
+        statusDiv.className = 'status error';
+        statusDiv.style.display = 'block';
+      }
+    </script>
+  </body>
+</html>

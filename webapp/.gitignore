@@ -1,0 +1,16 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log
+
+# Google Apps Script local development
+.clasp.json
+.clasprc.json
+
+# Credentials
+credentials/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo

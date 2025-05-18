@@ -1,0 +1,29 @@
+# AppScriptsLightController - Configuration File
+# Rename this file to config.yaml and update with your settings
+
+# Home Assistant configuration
+home_assistant:
+  # URL of your Home Assistant instance (local network address)
+  url: http://homeassistant.local:8123
+  # Long-lived access token from Home Assistant
+  # Generate this in your user profile in Home Assistant
+  token: your_long_lived_access_token_here
+  # Light entity IDs for control
+  lights:
+    light_1: light.entity_id_1
+    light_2: light.entity_id_2
+    # Add more lights as needed
+
+# Google API configuration
+google:
+  # Path to the Google API service account credentials JSON file
+  credentials_file: credentials/credentials.json
+  # ID of the Google Sheet to monitor (from the URL)
+  spreadsheet_id: your_spreadsheet_id_here
+  # Name of the sheet within the spreadsheet
+  sheet_name: Commands
+  # Name of the configuration sheet within the spreadsheet
+  config_sheet_name: Configuration
+
+# How often to check for new commands (in seconds)
+polling_interval: 5

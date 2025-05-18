@@ -1,0 +1,26 @@
+{
+  "name": "appscripts-light-controller-webapp",
+  "version": "1.0.0",
+  "description": "Web app for controlling lights through Home Assistant",
+  "main": "Code.js",
+  "scripts": {
+    "login": "npx clasp login",
+    "create": "npx clasp create --title \"AppScriptsLightController\" --type webapp",
+    "push": "npx clasp push",
+    "open": "npx clasp open",
+    "deploy": "npx clasp deploy --description \"Light Controls Web App\"",
+    "deployments": "npx clasp deployments"
+  },
+  "keywords": [
+    "google-apps-script",
+    "home-assistant",
+    "lighting",
+    "control"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@google/clasp": "^3.0.4-alpha"
+  }
+}

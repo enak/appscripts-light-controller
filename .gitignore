@@ -1,0 +1,44 @@
+# Configuration files with sensitive information
+config.yaml
+credentials.json
+*.credentials.json
+
+# Credentials directory
+credentials/
+
+# Log files
+*.log
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Node.js dependencies
+node_modules/
+npm-debug.log
+
+# Google Apps Script local development
+.clasp.json
+.clasprc.json
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
